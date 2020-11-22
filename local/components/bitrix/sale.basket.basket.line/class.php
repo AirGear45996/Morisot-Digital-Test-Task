@@ -410,7 +410,7 @@ class SaleBasketLineComponent extends CBitrixComponent
 	private function setImgSrc(&$arBasketItems, $arElementId, $arSku2Parent)
 	{
 		//TODO: need refactoring
-		$arImgFields = array ("PREVIEW_PICTURE", "DETAIL_PICTURE", "PROPERTY_MORE_PHOTO");
+		$arImgFields = array ("PREVIEW_PICTURE", "DETAIL_PICTURE", "PROPERTY_MORE_PHOTO", "PROPERTY_CML2_ARTICLE");
 		$arProductData = getProductProps(array_merge($arElementId, $arSku2Parent), array_merge(array("ID"), $arImgFields));
 
 		foreach ($arBasketItems as &$arItem)
@@ -440,7 +440,7 @@ class SaleBasketLineComponent extends CBitrixComponent
 			}
 
 			$arItem["PICTURE_SRC"] = "";
-			$arImage = null;
+			/*$arImage = null;
 			if (isset($arItem["PREVIEW_PICTURE"]) && intval($arItem["PREVIEW_PICTURE"]) > 0)
 				$arImage = CFile::GetFileArray($arItem["PREVIEW_PICTURE"]);
 			elseif (isset($arItem["DETAIL_PICTURE"]) && intval($arItem["DETAIL_PICTURE"]) > 0)
@@ -454,7 +454,17 @@ class SaleBasketLineComponent extends CBitrixComponent
 					true
 				);
 				$arItem["PICTURE_SRC"] = $arFileTmp["src"];
-			}
+			}*/
+
+			$path = '/upload/photo/'.$arItem['PROPERTY_CML2_ARTICLE_VALUE'];
+            $extensions = ['.jpg','.jpeg','.png','.gif'];
+            foreach($extensions as $ext) {
+                if(file_exists($_SERVER['DOCUMENT_ROOT'] . $path . $ext)) {
+                    $arItem["PICTURE_SRC"] = $path . $ext;
+                    break;
+                }
+            }
+
 		}
 	}
 
